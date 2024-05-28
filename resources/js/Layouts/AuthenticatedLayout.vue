@@ -156,39 +156,8 @@ const props = defineProps({
     isOpen: Boolean
 });
 const page = usePage()
-const sub_menu = page.props.sub_menu
-const userPermission = page.props.permission
-const userMenu = route().current();
-let IsUserMenuOpen = false;
-let IsRoleMenuOpen = false;
-let IsPermissionMenuOpen = false;
-let IsMenuSettingMenuOpen = false;
-if (userMenu.includes("users")) {
-    IsUserMenuOpen = true;
-} else if (userMenu.includes("roles")) {
-    IsRoleMenuOpen = true
-} else if (userMenu.includes("permission")) {
-    IsPermissionMenuOpen = true
-} else if (userMenu.includes("menu")) {
-    IsMenuSettingMenuOpen = true
 
-}
-const UsermenuIsOpen = () => {
-    return IsUserMenuOpen || IsRoleMenuOpen || IsPermissionMenuOpen;
-}
-const settingMenuIsOpen = () => {
-    return IsMenuSettingMenuOpen;
 
-}
-const checkPermissions = (menu) => {
-    const permissions = menu.permissions.map(permission => permission.name)
-    if (permissions.length == 'string') {
-        return userPermission.includes(permissions);
-    } else {
-        return permissions.some(permission => userPermission.includes(permission));
-    }
-
-}
 const Logout = () => {
     router.post(route('logout'));
 }
