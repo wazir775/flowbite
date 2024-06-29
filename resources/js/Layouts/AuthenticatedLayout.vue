@@ -174,10 +174,6 @@ const sidebarModuleToggle = ()=>{
         showSidebarExam.value = true;
         showSidebarSetting.value = false;
     }
-
-    console.log("Sidebar",sidebar);
-    console.log("Setting",showSidebarSetting.value);
-    console.log("Exam",showSidebarExam.value);
 };
 
 watch(
@@ -202,14 +198,21 @@ const showSidebar = (sidebar) => {
 const Logout = () => {
     router.post(route('logout'));
 }
-const isSidebarOpen = ref(true);
+
+const isSidebarOpen = ref(localStorage.getItem('sidebarToggle') === 'true');
+
+watch(isSidebarOpen, (newValue) => {
+    localStorage.setItem('sidebarToggle', newValue);
+});
 
 const toggleSidebar = () => {
     isSidebarOpen.value = !isSidebarOpen.value;
 };
-const openUserMenu = (sidebar) => {
-    isSidebarOpen.value = true
-}
+
+const openUserMenu = () => {
+    isSidebarOpen.value = true;
+
+};
 </script>
 
 <template>
@@ -235,11 +238,11 @@ const openUserMenu = (sidebar) => {
                                 clip-rule="evenodd"></path>
                         </svg>
                     </button>
-                    <Link >
-                    <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
+                    <Link href="#">
+                        <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
                     </Link>
                     <button @click="toggleSidebar" aria-expanded="true" aria-controls="sidebar"
-                        class="hidden p-2 ml-14 text-gray-600 text-white rounded cursor-pointer lg:inline hover:text-gray-900 hover:bg-gray-100">
+                        class="hidden p-2 ml-14 text-gray-600 rounded cursor-pointer lg:inline hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:group-hover:text-white" >
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd"
                                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -336,7 +339,7 @@ const openUserMenu = (sidebar) => {
 
                     <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
                         data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-full cursor-pointer"
-                        src="/docs/images/people/profile-picture-5.jpg" alt="User dropdown">
+                        src="/img/avatar.jpg" alt="User dropdown">
 
 
                     <div id="userDropdown"
@@ -384,15 +387,15 @@ const openUserMenu = (sidebar) => {
                         <ul class="pb-2 space-y-2">
 
                             <li>
-                                <Link href="/dashboard"
+                                <Link :href="route('dashboard')"
                                     class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                                    <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-                                </svg>
-                                <span class="ml-3" sidebar-toggle-item=""
-                                    v-html="isSidebarOpen ? 'Dashboard' : ''"></span>
+                                    <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                                        <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                                    </svg>
+                                    <span class="ml-3" sidebar-toggle-item=""
+                                        v-html="isSidebarOpen ? 'Dashboard' : ''"></span>
                                 </Link>
                             </li>
 
@@ -424,34 +427,34 @@ const openUserMenu = (sidebar) => {
                                 </button>
                                 <ul id="dropdown-pages" class="hidden py-2 space-y-2">
                                     <li>
-                                        <Link 
+                                        <Link href="#" 
                                             class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
-                                        Users
-                                        List
+                                            Users
+                                            List
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link 
+                                        <Link href="#"
                                             class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
-                                        Roles
+                                            Roles
                                         </Link>
                                     </li>
 
                                 </ul>
                             </li>
                             <li>
-                                <Link 
+                                <Link href="#"
                                     class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
                                 
-                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                        d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5" />
-                                </svg>
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                            d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5" />
+                                    </svg>
 
-                                <span class="ml-3" sidebar-toggle-item=""
-                                    v-html="isSidebarOpen ? 'Domains' : ''"></span>
+                                    <span class="ml-3" sidebar-toggle-item=""
+                                        v-html="isSidebarOpen ? 'Domains' : ''"></span>
                                 </Link>
                             </li>
                         </ul>
@@ -485,16 +488,16 @@ const openUserMenu = (sidebar) => {
                             </li>
 
                             <li>
-                                <Link 
+                                <Link href="#"
                                     class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                                <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                    fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                    <path
-                                        d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-1.98-1.71c.04.31.05.52.05.73 0 .21-.02.43-.05.73l-.14 1.13.89.7 1.08.84-.7 1.21-1.27-.51-1.04-.42-.9.68c-.43.32-.84.56-1.25.73l-1.06.43-.16 1.13-.2 1.35h-1.4l-.19-1.35-.16-1.13-1.06-.43c-.43-.18-.83-.41-1.23-.71l-.91-.7-1.06.43-1.27.51-.7-1.21 1.08-.84.89-.7-.14-1.13c-.03-.31-.05-.54-.05-.74s.02-.43.05-.73l.14-1.13-.89-.7-1.08-.84.7-1.21 1.27.51 1.04.42.9-.68c.43-.32.84-.56 1.25-.73l1.06-.43.16-1.13.2-1.35h1.39l.19 1.35.16 1.13 1.06.43c.43.18.83.41 1.23.71l.91.7 1.06-.43 1.27-.51.7 1.21-1.07.85-.89.7.14 1.13zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z">
-                                    </path>
-                                </svg>
-                                <span class="ml-3" sidebar-toggle-item=""
-                                    v-html="isSidebarOpen ? 'LMS' : ''"></span>
+                                    <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path
+                                            d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-1.98-1.71c.04.31.05.52.05.73 0 .21-.02.43-.05.73l-.14 1.13.89.7 1.08.84-.7 1.21-1.27-.51-1.04-.42-.9.68c-.43.32-.84.56-1.25.73l-1.06.43-.16 1.13-.2 1.35h-1.4l-.19-1.35-.16-1.13-1.06-.43c-.43-.18-.83-.41-1.23-.71l-.91-.7-1.06.43-1.27.51-.7-1.21 1.08-.84.89-.7-.14-1.13c-.03-.31-.05-.54-.05-.74s.02-.43.05-.73l.14-1.13-.89-.7-1.08-.84.7-1.21 1.27.51 1.04.42.9-.68c.43-.32.84-.56 1.25-.73l1.06-.43.16-1.13.2-1.35h1.39l.19 1.35.16 1.13 1.06.43c.43.18.83.41 1.23.71l.91.7 1.06-.43 1.27-.51.7 1.21-1.07.85-.89.7.14 1.13zM12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z">
+                                        </path>
+                                    </svg>
+                                    <span class="ml-3" sidebar-toggle-item=""
+                                        v-html="isSidebarOpen ? 'LMS' : ''"></span>
                                 </Link>
                             </li>
 

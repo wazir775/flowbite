@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Setting;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting\Department;
 use Illuminate\Http\Request;
 
 use Inertia\Inertia;
@@ -15,7 +16,8 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Settings/Department/Index');
+        $departments = Department::paginate(10);
+        return Inertia::render('Settings/Department/DepartmentIndex',array('users',$departments));
     }
 
     /**
@@ -23,7 +25,7 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Settings/Department/DepartmentForm');
     }
 
     /**
